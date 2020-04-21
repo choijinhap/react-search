@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import "../css/style_search.css";
 import ApiService from "../ApiService.js";
 import NewsList from "./NewsList";
-import Button from "./Button";
 import RangeBox from "./RangeBox";
+import Sort from "./Sort";
 
 class Main extends React.Component{
   shouldComponentUpdate(nextProps){
@@ -15,13 +15,12 @@ class Main extends React.Component{
       query:'',
       search: '',
       sfield: '',
-      sort:'',
+      sort:'SCORE',
 
-      score_on:true,
-      date_on:false,
     }
 
     this.rangeOnClick=this.rangeOnClick.bind(this);
+    this.sortOnClick=this.sortOnClick.bind(this);
   }
 
   onChangeQuery = (e) => {
@@ -47,24 +46,20 @@ class Main extends React.Component{
   }
   sortOnClick(e){
     let sort="";
-
-    if(e.target.className!="btn_sort_selected"){
-      this.setState({
-        score_on: !this.state.score_on,
-        date_on: !this.state.date_on
+    sort=e.target.id;
+    this.setState({
+      sort:[e.target.id]
+    });
+    ApiService.NewsSerch(this.state.query+"&sort="+e.target.id+"&sfield="+this.state.sfield).then((res) => {
+       this.setState({
+         search: res.data
       });
-      sort=this.state.date_on?"SCORE/desc":"date/desc";
-      ApiService.NewsSerch(this.state.query+"&sort="+sort+"&sfield="+this.state.sfield).then((res) => {
-         this.setState({
-           search: res.data
-        });
-      });
-    }
+    });
   }
   rangeOnClick(e){
     let range="";
     console.log(e.target.id);
-    range=e.target.id
+    range=e.target.id;
     this.setState({
       sfield:[e.target.id]
     });
@@ -138,10 +133,7 @@ class Main extends React.Component{
           <div className="result_header">
             "{search && <b>{search.query}</b>}"에 대한 통합 검색 결과는 총
             {search && <b>{search.totalCount}</b>}건 입니다.
-            <div className="header_sort">
-              <Button href="#" typeName="sort" text="정확도순" onClick={this.sortOnClick.bind(this)} clicked={this.state.score_on}/>
-              <Button href="#" typeName="sort" text="날짜순" onClick={this.sortOnClick.bind(this)} clicked={this.state.date_on}/>
-            </div>
+            <Sort sortOnClick={this.sortOnClick}/>
           </div>
 
           <NewsList search={search} />

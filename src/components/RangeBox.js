@@ -10,9 +10,9 @@ class RangeBox extends React.Component{
       sub_title_on:false,
     };
 
-    this.rangeClick=this.rangeClick.bind(this);
+    this.onClick=this.onClick.bind(this);
   }
-  rangeClick(e){
+  onClick(e){
     if(e.target.className!="range on"){
       this.setState({
         _on: false,
@@ -28,10 +28,10 @@ class RangeBox extends React.Component{
     return(
       <div className="box">
         <p className="tit">검색범위</p>
-        <a onClick={event=>{this.rangeClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state._on?" on":"")} id="">전체</a>
-        <a onClick={event=>{this.rangeClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state.title_on?" on":"")} id="title">제목</a>
-        <a onClick={event=>{this.rangeClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state.body_on?" on":"")} id="body">본문</a>
-        <a onClick={event=>{this.rangeClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state.sub_title_on?" on":"")} id="sub_title">부제목</a>
+        <a onClick={event=>{this.onClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state._on?" on":"")} id="">전체</a>
+        <a onClick={event=>{this.onClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state.title_on?" on":"")} id="title">제목</a>
+        <a onClick={event=>{this.onClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state.body_on?" on":"")} id="body">본문</a>
+        <a onClick={event=>{this.onClick(event); this.props.rangeOnClick(event);}} className={"range"+(this.state.sub_title_on?" on":"")} id="sub_title">부제목</a>
       </div>
     );
   }
