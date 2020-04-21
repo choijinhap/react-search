@@ -14,10 +14,14 @@ class Main extends React.Component{
     this.state={
       query:'',
       search: '',
+      sfield: '',
+      sort:'',
 
       score_on:true,
       date_on:false,
     }
+
+    this.rangeOnClick=this.rangeOnClick.bind(this);
   }
 
   onChangeQuery = (e) => {
@@ -42,7 +46,7 @@ class Main extends React.Component{
     });
   }
   sortOnClick(e){
-    var sort="";
+    let sort="";
 
     if(e.target.className!="btn_sort_selected"){
       this.setState({
@@ -50,12 +54,25 @@ class Main extends React.Component{
         date_on: !this.state.date_on
       });
       sort=this.state.date_on?"SCORE/desc":"date/desc";
-      ApiService.NewsSerch(this.state.query+"&sort="+sort).then((res) => {
+      ApiService.NewsSerch(this.state.query+"&sort="+sort+"&sfield="+this.state.sfield).then((res) => {
          this.setState({
            search: res.data
         });
       });
     }
+  }
+  rangeOnClick(e){
+    let range="";
+    console.log(e.target.id);
+    range=e.target.id
+    this.setState({
+      sfield:[e.target.id]
+    });
+    ApiService.NewsSerch(this.state.query+"&sort="+this.state.sort+"&sfield="+e.target.id).then((res) => {
+       this.setState({
+         search: res.data
+      });
+    });
   }
   render(){
     const { query , search } = this.state;
@@ -96,7 +113,7 @@ class Main extends React.Component{
                 <li></li>
               </ul>
             </div>
-            <RangeBox/>
+            <RangeBox rangeOnClick={this.rangeOnClick}/>
             <div className="box">
               <p className="tit">기간</p>
               <div className="date_setting">
