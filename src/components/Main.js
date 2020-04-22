@@ -4,6 +4,10 @@ import ApiService from "../ApiService.js";
 import NewsList from "./NewsList";
 import RangeBox from "./RangeBox";
 import Sort from "./Sort";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css'
+import Picker from "./Picker"
+
 
 class Main extends React.Component{
   shouldComponentUpdate(nextProps){
@@ -13,16 +17,20 @@ class Main extends React.Component{
     super(props);
     this.state={
       query:'',
+      realQuery:'',
       search: '',
       sfield: '',
       sort:'SCORE',
+      date: new Date(),
 
     }
 
     this.rangeOnClick=this.rangeOnClick.bind(this);
     this.sortOnClick=this.sortOnClick.bind(this);
   }
-
+  onChangeDate=(date)=>{
+    this.setState({date});
+  }
   onChangeQuery = (e) => {
 
      this.setState({
@@ -38,6 +46,9 @@ class Main extends React.Component{
     });
   }
   onClick = () => {
+    this.setState({
+      realQuery:this.state.query
+    });
     ApiService.NewsSerch(this.state.query).then((res) => {
        this.setState({
          search: res.data
@@ -50,7 +61,7 @@ class Main extends React.Component{
     this.setState({
       sort:[e.target.id]
     });
-    ApiService.NewsSerch(this.state.query+"&sort="+e.target.id+"&sfield="+this.state.sfield).then((res) => {
+    ApiService.NewsSerch(this.state.realQuery+"&sort="+e.target.id+"&sfield="+this.state.sfield).then((res) => {
        this.setState({
          search: res.data
       });
@@ -58,12 +69,11 @@ class Main extends React.Component{
   }
   rangeOnClick(e){
     let range="";
-    console.log(e.target.id);
     range=e.target.id;
     this.setState({
       sfield:[e.target.id]
     });
-    ApiService.NewsSerch(this.state.query+"&sort="+this.state.sort+"&sfield="+e.target.id).then((res) => {
+    ApiService.NewsSerch(this.state.realQuery+"&sort="+this.state.sort+"&sfield="+e.target.id).then((res) => {
        this.setState({
          search: res.data
       });
@@ -109,22 +119,7 @@ class Main extends React.Component{
               </ul>
             </div>
             <RangeBox rangeOnClick={this.rangeOnClick}/>
-            <div className="box">
-              <p className="tit">기간</p>
-              <div className="date_setting">
-                <label className="radio-type">
-                  <input type="radio" name="dt" value="ALL" />
-                  <span>전체</span>
-                </label>
-                <label className="radio-type">
-                  <input type="radio" name="dt" value="1" />
-                  <span>기간</span>
-                </label>
-                <input type="text" name="sDate" id="sDate" />
-                ~
-                <input type="text" name="eDate" id="eDate" />
-              </div>
-            </div>
+            <Picker/>
             <div className="box myword">
               <p className="tit">내가 찾은 검색어</p>
               <ul className="keyword" id="mySearchKeyword"></ul>
