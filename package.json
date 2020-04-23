@@ -13,6 +13,7 @@
     "rc-timepicker": "0.0.10",
     "react": "^16.13.1",
     "react-calendar": "^3.0.1",
+    "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-scripts": "3.4.1",
     "typescript": "^3.8.3"

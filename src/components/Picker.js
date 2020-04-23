@@ -12,15 +12,16 @@ import TimePickerPanel from 'rc-time-picker/lib/Panel';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import 'moment/locale/en-gb';
+import 'moment/locale/ko';
 
 const format = 'YYYY-MM-DD HH:mm:ss';
-const cn = window.location.search.indexOf('cn') !== -1;
+const en = window.location.search.indexOf('en') !== -1;
 
 const now = moment();
-if (cn) {
-  now.locale('zh-cn').utcOffset(8);
+if (en) {
+  now.locale('en-gb').utcOffset(8);
 } else {
-  now.locale('en-gb').utcOffset(0);
+  now.locale('ko').utcOffset(0);
 }
 
 function getFormat(time) {
@@ -34,7 +35,7 @@ defaultCalendarValue.add(-1, 'month');
 const timePickerElement = <TimePickerPanel />;
 
 
-const SHOW_TIME = true;
+const SHOW_TIME = false;
 
 class Picker extends React.Component {
   state = {
@@ -45,7 +46,7 @@ class Picker extends React.Component {
   render() {
     const props = this.props;
     const calendar = (<Calendar
-      locale={cn ? zhCN : enUS}
+      locale={en ? zhCN : enUS}
       defaultValue={now}
       timePicker={props.showTime ? timePickerElement : null}
       disabledDate={props.disabledDate}
@@ -81,9 +82,11 @@ constructor(props){
   this.state={
     startValue: '',
     endValue: '',
+    selected: 'ALL',
   }
     this.onAllChanged=this.onAllChanged.bind(this);
     this.onRangeChanged=this.onRangeChanged.bind(this);
+
 }
 
 
@@ -95,9 +98,10 @@ constructor(props){
   }
 
   onRangeChanged(e){
+    console.log(this.state.endValue);
     this.setState({
       startValue:'',
-      endValue:'',
+      endValue: moment("2020-04-23").locale('ko').utcOffset(9),
     });
   }
 
@@ -139,7 +143,7 @@ constructor(props){
         <p className="tit">기간</p>
       <div className="date_setting">
         <label className="radio-type">
-          <input type="radio" name="dt" value="ALL" onChange={this.onAllChanged} />
+          <input type="radio" name="dt" value="ALL" onChange={this.onAllChanged}/>
           <span>전체</span>
         </label>
         <label className="radio-type">

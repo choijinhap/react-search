@@ -1,0 +1,40 @@
+var는 유연한 만큼 불안전하다.
+
+var a=3;
+console.log(a);
+var a="ASd";
+console.log(a);
+이렇게 사용가능
+
+그래서
+let 과 const 등장
+재선언불가
+차이는   immutable 여부
+let은 재할당 가능
+const는 재할당 불가
+
+호이스팅
+호이스팅(Hoisting)이란, var 선언문이나 function 선언문 등을 해당 스코프의 선두로 옮긴 것처럼 동작하는 특성을 말한다.
+자바스크립트는 ES6에서 도입된 let, const를 포함하여 모든 선언(var, let, const, function, function*, class)을 호이스팅한다.
+
+var는 선언과 초기화가 동시에
+
+console.log(foo); // undefined
+
+var foo;
+console.log(foo); // undefined
+
+foo = 1; // 할당문에서 할당 단계가 실행된다.
+console.log(foo); // 1
+
+let은 분리되서
+
+console.log(foo); // ReferenceError: foo is not defined
+
+let foo; // 변수 선언문에서 초기화 단계가 실행된다.
+console.log(foo); // undefined
+
+foo = 1; // 할당문에서 할당 단계가 실행된다.
+console.log(foo); // 1
+
+초기화되기전에 참조하면 에러나옴.

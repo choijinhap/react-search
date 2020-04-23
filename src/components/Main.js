@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React  from "react";
 import "../css/style_search.css";
 import ApiService from "../ApiService.js";
 import NewsList from "./NewsList";
 import RangeBox from "./RangeBox";
 import Sort from "./Sort";
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'
-import Picker from "./Picker"
+import 'react-calendar/dist/Calendar.css';
+import Picker from "./Picker";
+import Cookie from "./Cookie";
 
 
 class Main extends React.Component{
@@ -38,7 +39,7 @@ class Main extends React.Component{
      });
   }
    componentDidMount(){
-     ApiService.NewsView().then((res) => {
+     ApiService.NewsSerch(this.state.realQuery+"&sort="+this.state.sort).then((res) => {
        this.setState({
          query: '',
          search: res.data
@@ -123,6 +124,7 @@ class Main extends React.Component{
             <div className="box myword">
               <p className="tit">내가 찾은 검색어</p>
               <ul className="keyword" id="mySearchKeyword"></ul>
+              <Cookie/>
             </div>
           </div>
           <div className="result_header">
