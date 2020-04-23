@@ -8,14 +8,20 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import Picker from "./Picker";
 import Cookie from "./Cookie";
+import { withCookies , Cookies} from 'react-cookie';
+import { instanceOf } from 'prop-types';
 
 
 class Main extends React.Component{
   shouldComponentUpdate(nextProps){
     return nextProps.message === this.props.message;
   }
+  static porpTypes={
+    cookies:instanceOf(Cookies).isRequired
+  };
   constructor(props){
     super(props);
+    const{cookies}=props;
     this.state={
       query:'',
       realQuery:'',
@@ -23,6 +29,7 @@ class Main extends React.Component{
       sfield: '',
       sort:'SCORE',
       date: new Date(),
+
 
     }
 
@@ -46,10 +53,25 @@ class Main extends React.Component{
       });
     });
   }
+  test=()=>{
+    const{cookies}=this.props;
+    const cookie=cookies.get('mySearchKeyword');
+    console.log(cookies);
+  }
+  // 쿠키값 설정
+   setCookie=(c_name,value,exdays)=> {
+    const{cookies}=this.props;
+  	var exdate=new Date();
+  	exdate.setDate(exdate.getDate() + exdays);
+  	var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+  	cookies.set(c_name + "=" + c_value);
+  }
   onClick = () => {
+    const{cookies}=this.props;
     this.setState({
       realQuery:this.state.query
     });
+    this.setCookie('mySearchKeyword',this.state.query,365);
     ApiService.NewsSerch(this.state.query).then((res) => {
        this.setState({
          search: res.data
@@ -106,7 +128,7 @@ class Main extends React.Component{
                 검색
               </button>
               <label className="futher_search">
-                <input type="checkbox" id="reChk" />
+                <input type="checkbox" id="reChk" onClick={this.test}/>
                 결과내 재검색
               </label>
             </div>
@@ -140,4 +162,4 @@ class Main extends React.Component{
   }
 };
 
-export default Main;
+export default withCookies(Main);
